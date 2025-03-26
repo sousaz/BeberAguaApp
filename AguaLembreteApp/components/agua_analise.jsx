@@ -9,13 +9,52 @@ const HISTORICO_AGUA = "waterHistory";
 export default function AguaAnalise(){
     const { theme } = useTheme()
     const [mean, setMean] = useState(0)
+    const [bDay, setBDay] = useState(0)
+    const [wDay, setWDay] = useState(0)
+
+    const getWeekDay = (dateString) => {
+      const [day, month, year] = dateString.split("/")
+      const date = new Date(`${year}-${month}-${day}`)
+      const daysOfWeek = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"]
+      return daysOfWeek[date.getDay()]
+    }
+
+    const getStartOfWeek = (date) => {
+      const d = new Date(date)
+      const day = d.getDay()
+      d.setDate(d.getDate() - day)
+      d.setHours(0, 0, 0, 0)
+      return d
+  };
+  
+  const getEndOfWeek = (date) => {
+      const d = new Date(getStartOfWeek(date))
+      d.setDate(d.getDate() + 6)
+      d.setHours(23, 59, 59, 999)
+      return d
+  };
 
     const getHistory = async () => {
         const savedHistory = await AsyncStorage.getItem(HISTORICO_AGUA);
         if (savedHistory) {
           const parsed = JSON.parse(savedHistory);
-          parsed.reduce((acc, curr) => acc + curr.count, 0)
-          console.log(parsed)
+          // const history = {"Domingo": 0, "Segunda-feira": 0, "Terça-feira": 0, "Quarta-feira": 0, "Quinta-feira": 0, "Sexta-feira": 0, "Sábado": 0}
+
+          const today = new Date()
+          const startOfWeek = getStartOfWeek(today)
+          const endOfWeek = getStartOfWeek(today)
+
+          const thisWeekRecords = parsed.filter(entry => {
+            const [day, month, year] = entry.date.split("/")
+            const entryDate = new Date(`${year}-${month}-${day}`)
+            return entryDate >= startOfWeek && entryDate <= endOfWeek
+          })
+          if(thisWeekRecords.length > 0){
+            const bestDay = parsed.reduce((prev, curr) => prev.count > curr.count ? prev : curr)
+            setBDay({"date": getWeekDay(bestDay.date), "count": bestDay.count})
+          }
+          const mean = parsed.reduce((acc, curr) => acc + curr.count, 0) / parsed.length
+          setMean(mean)
         }
     }
 
@@ -30,12 +69,16 @@ export default function AguaAnalise(){
             <View style={styles.cardContent}>
                 <View style={styles.item}>
                   <Text style={[styles.counter, { color: theme.secondaryText }]}>Média: </Text>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>12</Text>
+                  <Text style={[styles.counter, { color: theme.secondaryText }]}>{mean}</Text>
                 </View>
-                <View style={styles.item}>
+                <View style={styles.item2}>
                   <Text style={[styles.counter, { color: theme.secondaryText }]}>Melhor dia:  </Text>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>13</Text>
+                  <Text style={[styles.counter2, { color: theme.secondaryText }]}>{bDay.date} -> {bDay.count} copos</Text>
                 </View>
+                {/* <View style={styles.item2}>
+                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Tendências:  </Text>
+                  <Text style={[styles.counter2, { color: theme.secondaryText }]}>{bDay.date} -> {bDay.count} copos</Text>
+                </View> */}
             </View>
         </View>
     )
@@ -57,6 +100,10 @@ const styles = StyleSheet.create({
       fontSize: 46,
       fontWeight: "bold",
     },
+    counter2: {
+      fontSize: 23,
+      fontWeight: "bold",
+    },
     counterText: {
       fontSize: 24,
       fontWeight: "600",
@@ -64,6 +111,9 @@ const styles = StyleSheet.create({
     item: {
       width: "100%",
       flexDirection: "row",
-      justifyContent: "space-around",
+    },
+    item2: {
+      width: "100%",
+      flexDirection: "col",
     }
 });
