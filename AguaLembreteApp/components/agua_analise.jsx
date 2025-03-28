@@ -10,7 +10,6 @@ export default function AguaAnalise(){
     const { theme } = useTheme()
     const [mean, setMean] = useState(0)
     const [bDay, setBDay] = useState(0)
-    const [wDay, setWDay] = useState(0)
 
     const getWeekDay = (dateString) => {
       const [day, month, year] = dateString.split("/")
@@ -42,7 +41,7 @@ export default function AguaAnalise(){
 
           const today = new Date()
           const startOfWeek = getStartOfWeek(today)
-          const endOfWeek = getStartOfWeek(today)
+          const endOfWeek = getEndOfWeek(today)
 
           const thisWeekRecords = parsed.filter(entry => {
             const [day, month, year] = entry.date.split("/")
