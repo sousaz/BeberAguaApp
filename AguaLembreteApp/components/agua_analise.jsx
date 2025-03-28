@@ -65,13 +65,13 @@ export default function AguaAnalise(){
 
     return (
         <View style={[styles.counterCard, { backgroundColor: theme.backgroundColor }]}>
-            <View style={styles.cardContent}>
+            <View style={[styles.cardContent, { backgroundColor: theme.cardBackground }]}>
                 <View style={styles.item2}>
                   <Text style={[styles.counter, { color: theme.secondaryText }]}>Média Geral: </Text>
                   <Text style={[styles.counter2, { color: theme.secondaryText }]}>{mean} copos</Text>
                 </View>
             </View>
-            <View style={styles.cardContent}>
+            <View style={[styles.cardContent, { backgroundColor: theme.cardBackground }]}>
                 <View style={styles.item2}>
                   <Text style={[styles.counter, { color: theme.secondaryText }]}>Melhor dia dessa semana:  </Text>
                   <Text style={[styles.counter2, { color: theme.secondaryText }]}>{bDay.date} -> {bDay.count} copos</Text>
@@ -94,10 +94,9 @@ const styles = StyleSheet.create({
       gap: 10,
       justifyContent: "center",
       marginBottom: 30,
-      backgroundColor: "#fff",
       width: "100%",
-      borderRadius: 10,
-      padding: 15
+      borderRadius: 30,
+      padding: 18,
     },
     counter: {
       fontSize: 46,
