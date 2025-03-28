@@ -64,20 +64,18 @@ export default function AguaAnalise(){
     );
 
     return (
-        <View style={[styles.counterCard, { backgroundColor: theme.cardBackground }]}>
+        <View style={[styles.counterCard, { backgroundColor: theme.backgroundColor }]}>
             <View style={styles.cardContent}>
-                <View style={styles.item}>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Média: </Text>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>{mean}</Text>
-                </View>
                 <View style={styles.item2}>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Melhor dia:  </Text>
+                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Média Geral: </Text>
+                  <Text style={[styles.counter2, { color: theme.secondaryText }]}>{mean} copos</Text>
+                </View>
+            </View>
+            <View style={styles.cardContent}>
+                <View style={styles.item2}>
+                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Melhor dia dessa semana:  </Text>
                   <Text style={[styles.counter2, { color: theme.secondaryText }]}>{bDay.date} -> {bDay.count} copos</Text>
                 </View>
-                {/* <View style={styles.item2}>
-                  <Text style={[styles.counter, { color: theme.secondaryText }]}>Tendências:  </Text>
-                  <Text style={[styles.counter2, { color: theme.secondaryText }]}>{bDay.date} -> {bDay.count} copos</Text>
-                </View> */}
             </View>
         </View>
     )
@@ -85,7 +83,7 @@ export default function AguaAnalise(){
 
 const styles = StyleSheet.create({
     counterCard: {
-      flexDirection: "row",
+      flexDirection: "col",
       padding: 20,
       alignItems: "center",
       justifyContent: "space-between",
@@ -94,6 +92,12 @@ const styles = StyleSheet.create({
       flexDirection: "column",
       alignItems: "center",
       gap: 10,
+      justifyContent: "center",
+      marginBottom: 30,
+      backgroundColor: "#fff",
+      width: "100%",
+      borderRadius: 10,
+      padding: 15
     },
     counter: {
       fontSize: 46,
